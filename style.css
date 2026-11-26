@@ -1,0 +1,66 @@
+
+body {
+  background: #151515;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+
+h1 {
+  color: gold;
+}
+
+#pista {
+  background: #444;
+  margin: 20px auto;
+  width: 90%;
+  max-width: 900px;
+  position: relative;
+  border: 5px solid white;
+}
+
+.faixa {
+  height: 75px;
+  border-bottom: 3px dashed white;
+  display: flex;
+  align-items: center;
+  font-size: 35px;
+  position: relative;
+  white-space: nowrap;
+}
+
+.faixa span {
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.faixa:nth-child(1) { color: red; }
+.faixa:nth-child(2) { color: blue; }
+.faixa:nth-child(3) { color: lime; }
+.faixa:nth-child(4) { color: yellow; }
+.faixa:nth-child(5) { color: orange; }
+
+#chegada {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  height: 100%;
+  font-size: 35px;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+button {
+  background: gold;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+button:hover {
+  background: orange;
+}
