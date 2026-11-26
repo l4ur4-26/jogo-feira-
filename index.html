@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corrida dos cursos</title>
+<style>
+body {
+  margin: 0;
+  background: #222;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+canvas {
+  background: #444;
+  border: 4px solid white;
+  max-width: 95%;
+}
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>🏎️ Corrida de 5 Carros</h1>
+<p>Pontuação: <span id="score">0</span></p>
+<canvas id="game" width="400" height="600"></canvas>
+<br><br>
+<button onclick="startGame()">Iniciar / Reiniciar</button>
+<p>Use ← e → para dirigir</p>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let player, enemies, score, running;
+let keys = {};
+
+document.addEventListener("keydown", e => {
+  keys[e.key] = true;
+});
+
+document.addEventListener("keyup", e => {
+  keys[e.key] = false;
+});
+
+function startGame() {
+  player = { x: 175, y: 480, color: "red" };
+
+  enemies = [
+    { x: 45, y: -100, color: "blue", speed: 3 },
+    { x: 175, y: -250, color: "yellow", speed: 4 },
+    { x: 305, y: -400, color: "lime", speed: 3.5 }
+  ];
+
+  score = 0;
+  running = true;
+  requestAnimationFrame(loop);
+}
+
+function car(x, y, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, 35, 65);
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(x + 5, y + 8, 25, 15);
+  ctx.fillRect(x + 5, y + 43, 25, 12);
+}
+
+function drawRoad() {
+  ctx.fillStyle = "#333";
+  ctx.fillRect(20, 0, 360, 600);
+
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 4;
+  ctx.setLineDash([30, 25]);
+
+  ctx.beginPath();
+  ctx.moveTo(140, 0);
+  ctx.lineTo(140, 600);
+  ctx.moveTo(260, 0);
+  ctx.lineTo(260, 600);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+}
+
+function collision(a, b) {
+  return (
+    a.x < b.x + 35 &&
+    a.x + 35 > b.x &&
+    a.y < b.y + 65 &&
+    a.y + 65 > b.y
+  );
+}
+
+function loop() {
+  if (!running) return;
+
+  ctx.clearRect(0, 0, 400, 600);
+  drawRoad();
+
+  if (keys["ArrowLeft"]) player.x -= 5;
+  if (keys["ArrowRight"]) player.x += 5;
+
+  player.x = Math.max(25, Math.min(340, player.x));
+
+  car(player.x, player.y, player.color);
+
+  for (let enemy of enemies) {
+    enemy.y += enemy.speed;
+
+    if (enemy.y > 620) {
+      enemy.y = -100;
+      enemy.x = [45, 175, 305][Math.floor(Math.random() * 3)];
+      score += 10;
+    }
+
+    car(enemy.x, enemy.y, enemy.color);
+
+    if (collision(player, enemy)) {
+      running = false;
+      alert("Fim de jogo! Pontuação: " + score);
+    }
+  }
+
+  document.getElementById("score").textContent = score;
+
+  if (running) requestAnimationFrame(loop);
+}
+</script>
+
+</body>
+</html>
